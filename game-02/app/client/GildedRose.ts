@@ -1,37 +1,41 @@
 import {Item} from "../models/ItemModel";
 import {GildedRoseService} from "../services/GildedRoseService";
 import {GildedRoseEnum} from "../enums/GildedRoseEnum";
+import {GildedFactory} from "../factories/GildedFactory";
 
 class GildedRose {
     protected items: Array<Item>;
     protected gildedService: GildedRoseService;
+    protected gildedFactory: GildedFactory
 
     constructor(items = [] as Array<Item>) {
         this.items = items;
         this.gildedService = new GildedRoseService();
+        this.gildedFactory = new GildedFactory();
     }
+
 
     updateQuality() :Item[]  {
         this.items.forEach(currentItem => {
             switch (currentItem.name) {
                 case GildedRoseEnum.AGED_BRIE: {
-                    currentItem = this.gildedService.updateQualityForAgedBrie(currentItem)
+                    const newItem = this.gildedFactory.getInstance(GildedRoseEnum.AGED_BRIE).update(currentItem)
                     break;
                 }
                 case GildedRoseEnum.CONCERT: {
-                    currentItem = this.gildedService.updateQualityForConcert(currentItem)
+                    currentItem = this.gildedFactory.getInstance(GildedRoseEnum.CONCERT).update(currentItem)
                     break;
                 }
                 case  GildedRoseEnum.SULFURAS:  {
-                    currentItem = this.gildedService.updateQualityForSulfuras(currentItem)
+                    const newItem= this.gildedFactory.getInstance(GildedRoseEnum.SULFURAS).update(currentItem)
                     break;
                 }
                 case GildedRoseEnum.CONJURED:  {
-                    currentItem = this.gildedService.updateQualityForConjured(currentItem)
+                    const newItem = this.gildedFactory.getInstance(GildedRoseEnum.CONJURED).update(currentItem)
                     break;
                 }
                 default: {
-                    currentItem = this.gildedService.updateQualityForNormalItem(currentItem)
+                    const newItem = this.gildedFactory.getInstance().update(currentItem)
                 }
             }
         })
